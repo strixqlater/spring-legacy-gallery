@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.daoko.web.mapper.boardMapper">
-
+	<select id="getPostList" resultType="kr.daoko.web.model.PostVO">
+		select post_id, board_id, category_id, title, view_cnt, reg_id, reg_dt
+		from tbl_post
+	</select>
+	
+	<select id="getPostContent" resultType="kr.daoko.web.model.PostVO">
+		select post_id, board_id, category_id, title, content, view_cnt, reg_id, reg_dt, edit_dt
+		from tbl_post
+		where post_id = #{post_id}
+	</select>
+	
+	<insert id="insertPost" parameterType="kr.daoko.web.model.PostVO">
+		insert into tbl_post(board_id, category_id, title, content, reg_id, reg_dt, edit_dt)
+		values(0, 0, #{title}, #{content}, #{reg_id}, now(), now())
+	</insert>
+	
+	<update id="updatePost" parameterType="kr.daoko.web.model.PostVO">
+		update tbl_post
+		set board_id = #{board_id}, category_id = #{category_id}, title = #{title}, content = #{content}, edit_dt = now()
+		where post_id = #{post_id}
+	</update>
+	
+	<delete id="deletePost" parameterType="int">
+		delete from tbl_post
+		where post_id = #{post_id}
+	</delete>
+	
+	<update id="updateViewCount" parameterType="int">
+		update tbl_post
+		set view_cnt = view_cnt + 1
+		where post_id = #{post_id}
+	</update>
 </mapper>
